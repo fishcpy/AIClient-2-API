@@ -14,14 +14,7 @@ env:
 
 jobs:
   build-and-push:
-    strategy:
-      matrix:
-        platform:
-          - runner: ubuntu-latest
-            arch: amd64
-          - runner: arms-2
-            arch: arm64
-    runs-on: ${{ matrix.platform.runner }}
+    runs-on: ubuntu-latest
     permissions:
       contents: write  # 需要写权限来创建 tag
       packages: write
@@ -41,7 +34,6 @@ jobs:
           echo "读取到版本号：$VERSION"
 
       - name: 检查 tag 是否已存在
-        if: matrix.platform.arch == 'amd64'
         id: check_tag
         run: |
           if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
@@ -53,7 +45,7 @@ jobs:
           fi
 
       - name: 创建 Git Tag
-        if: matrix.platform.arch == 'amd64' && steps.check_tag.outputs.exists == 'false'
+        if: steps.check_tag.outputs.exists == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -79,7 +71,7 @@ jobs:
             type=raw,value=${{ steps.version.outputs.version }}
             type=raw,value=latest
 
-      - name: 构建并推送 Docker 镜像（${{ matrix.platform.arch }}）
+      - name: 构建并推送 Docker 镜像
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -87,10 +79,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/${{ matrix.platform.arch }}
+          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          provenance: false
 
       - name: 生成构建摘要
         run: |
