@@ -87,3 +87,22 @@
     background: var(--code-bg);
     color: var(--code-text);
 }
+
+/* 统一美化增强 */
+.logs-container,
+.info-card {
+    border-radius: var(--radius-xl);
+}
+
+.logs-container {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 28px var(--neutral-shadow-10);
+}
+
+.info-card {
+    border: 1px solid var(--border-color);
+}
+
+.info-card:hover {
+    box-shadow: 0 12px 28px var(--neutral-shadow-10);
+}

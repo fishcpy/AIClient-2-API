@@ -1514,3 +1514,77 @@
 [data-theme="dark"] .highlight-note i {
     color: var(--warning-color);
 }
+
+/* =============================
+   二次可视化增强（更明显）
+   ============================= */
+
+.providers-container {
+    border-radius: var(--radius-xl);
+    box-shadow: 0 14px 36px var(--neutral-shadow-10);
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.stats-grid {
+    gap: 1.25rem;
+}
+
+.stat-card {
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 22px var(--neutral-shadow-10);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-color);
+    box-shadow: 0 16px 34px var(--primary-10);
+}
+
+.provider-item,
+.provider-item-detail,
+.routing-example-card,
+.add-provider-form {
+    border-radius: var(--radius-xl);
+}
+
+.provider-item,
+.provider-item-detail {
+    box-shadow: 0 6px 18px var(--neutral-shadow-md);
+}
+
+.provider-item:hover,
+.provider-item-detail:hover,
+.routing-example-card:hover {
+    transform: translateY(-2px);
+}
+
+.routing-example-card {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 14px var(--neutral-shadow-md);
+}
+
+.provider-summary {
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 24px var(--neutral-shadow-md);
+}
+
+.provider-modal-content {
+    border-radius: 20px;
+    box-shadow: 0 30px 80px var(--neutral-shadow-40);
+}
+
+.provider-item-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .providers-container {
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+}
+
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .provider-item,
+[data-theme="dark"] .provider-item-detail,
+[data-theme="dark"] .routing-example-card {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}

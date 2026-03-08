@@ -463,3 +463,27 @@ input:checked + .toggle-slider:before {
     background: var(--bg-secondary);
     border-color: var(--border-color);
 }
+
+/* 统一美化增强 */
+.config-panel,
+.advanced-config-section,
+.config-group-section {
+    border-radius: var(--radius-xl);
+}
+
+.config-panel {
+    box-shadow: 0 8px 28px var(--neutral-shadow-10);
+}
+
+.config-group-section:hover,
+.advanced-config-section:hover {
+    box-shadow: 0 10px 30px var(--neutral-shadow-10);
+}
+
+.provider-tags {
+    border-radius: var(--radius-lg);
+}
+
+.provider-tag {
+    box-shadow: 0 1px 2px var(--neutral-shadow-10);
+}

@@ -590,3 +590,29 @@
 [data-theme="dark"] .api-example pre {
     background: var(--bg-tertiary);
 }
+
+/* 统一美化增强 */
+.guide-panel,
+.feature-card,
+.guide-provider-item,
+.client-config-item,
+.api-example,
+.model-prefix-list,
+.faq-item,
+.flow-step {
+    border-radius: var(--radius-xl);
+}
+
+.guide-panel {
+    box-shadow: 0 10px 28px var(--neutral-shadow-10);
+}
+
+.feature-card:hover,
+.guide-provider-item:hover,
+.flow-step:hover {
+    box-shadow: 0 12px 28px var(--neutral-shadow-10);
+}
+
+.guide-note {
+    box-shadow: inset 0 0 0 1px var(--info-border);
+}

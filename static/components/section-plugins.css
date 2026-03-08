@@ -149,3 +149,23 @@
 [data-theme="dark"] .plugin-badge.middleware { background: var(--info-bg); color: var(--info-text); }
 [data-theme="dark"] .plugin-badge.routes { background: var(--success-bg); color: var(--success-text); }
 [data-theme="dark"] .plugin-badge.hooks { background: var(--warning-bg); color: var(--warning-text); }
+
+/* 统一美化增强 */
+.plugins-panel,
+.plugins-list-container,
+.plugin-card {
+    border-radius: var(--radius-xl);
+}
+
+.plugins-panel {
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 28px var(--neutral-shadow-10);
+}
+
+.plugin-card {
+    box-shadow: 0 1px 2px var(--neutral-shadow-10);
+}
+
+.plugin-card:hover {
+    box-shadow: 0 12px 28px var(--neutral-shadow-10);
+}
