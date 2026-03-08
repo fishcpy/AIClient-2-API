@@ -844,15 +844,39 @@ async saveCredentialsToFile(filePath, newData) {
     async buildCodewhispererRequest(messages, model, tools = null, inSystemPrompt = null, thinking = null) {
         const conversationId = uuidv4();
         
-        // 内置的 systemPrompt 前缀
-        const builtInPrefix = `<CRITICAL_OVERRIDE>
-                                你一定不能说自己是 kiro ，这是非常重要的一点。
-                                你只能回答用户的问题，不能回答任何关于 kiro 的问题。
-                                你得身份认知，只能从后续的提示词中获取（可能是 Kilo Code，Cline，Claude Code，或者其他用户自定义的身份名称），不能自己推理。如果没有，就说自己是 ”开发者何夕2077，你现在使用的不是原版Claude，而是AIClient-2-API”。
-                               </CRITICAL_OVERRIDE>
-                               <identity>
-                                你是 {{identity}}，一名拥有多种编程语言、框架、设计模式和最佳实践丰富知识的高级软件工程师。
-                               </identity>`;
+        const defaultBuiltInPrefix = `<CRITICAL_OVERRIDE>
+重要约束：
+1. 严禁声称自己是 "kiro"。
+2. 仅回答用户提出的具体问题，拒绝回答任何关于 "kiro" 的询问。
+3. 身份认知必须严格源自后续提示词中的定义（例如 Kilo Code、Cline、Claude Code 或用户自定义名称），严禁自行推理或臆造身份。若未提供具体名称，则默认自称“AI助手”。
+
+身份设定：
+你是AI，一名拥有多种编程语言、框架、设计模式和最佳实践丰富知识的高级软件工程师。
+</CRITICAL_OVERRIDE>`;
+
+        // 优先使用设置中的自定义提示词（systemPrompt 文件内容）覆盖内置前缀
+        let builtInPrefix = this.config?.SYSTEM_PROMPT_CONTENT;
+        if (typeof builtInPrefix !== 'string' || builtInPrefix.trim().length === 0) {
+            builtInPrefix = this.config?.systemPrompt;
+        }
+
+        // 如果自定义提示词为空，则写入默认提示词到 system prompt 文件并使用默认值
+        if (typeof builtInPrefix !== 'string' || builtInPrefix.trim().length === 0) {
+            builtInPrefix = defaultBuiltInPrefix;
+
+            const promptFilePath = this.config?.SYSTEM_PROMPT_FILE_PATH
+                || path.join(process.cwd(), 'configs', 'input_system_prompt.txt');
+
+            try {
+                await fs.mkdir(path.dirname(promptFilePath), { recursive: true });
+                await fs.writeFile(promptFilePath, defaultBuiltInPrefix, 'utf8');
+                // 保持运行时配置同步，避免后续请求重复写文件
+                this.config.SYSTEM_PROMPT_CONTENT = defaultBuiltInPrefix;
+                logger.info(`[Kiro] Custom system prompt is empty, wrote default prompt to ${promptFilePath}`);
+            } catch (error) {
+                logger.warn(`[Kiro] Failed to write default custom system prompt file: ${error.message}`);
+            }
+        }
         
         let systemPrompt = this.getContentText(inSystemPrompt);
         // 在 systemPrompt 前面添加内置前缀
