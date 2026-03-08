@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'VERSION'  # 仅当 VERSION 文件变更时触发
+  workflow_dispatch:  # 允许手动触发
 
 env:
   REGISTRY: docker.io
@@ -13,7 +14,14 @@ env:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - runner: ubuntu-latest
+            arch: amd64
+          - runner: arms-2
+            arch: arm64
+    runs-on: ${{ matrix.platform.runner }}
     permissions:
       contents: write  # 需要写权限来创建 tag
       packages: write
@@ -30,9 +38,10 @@ jobs:
           VERSION=$(cat VERSION | tr -d '\n\r ')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
-          echo "读取到版本号: $VERSION"
+          echo "读取到版本号：$VERSION"
 
       - name: 检查 tag 是否已存在
+        if: matrix.platform.arch == 'amd64'
         id: check_tag
         run: |
           if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
@@ -44,7 +53,7 @@ jobs:
           fi
 
       - name: 创建 Git Tag
-        if: steps.check_tag.outputs.exists == 'false'
+        if: matrix.platform.arch == 'amd64' && steps.check_tag.outputs.exists == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -70,7 +79,7 @@ jobs:
             type=raw,value=${{ steps.version.outputs.version }}
             type=raw,value=latest
 
-      - name: 构建并推送 Docker 镜像
+      - name: 构建并推送 Docker 镜像（${{ matrix.platform.arch }}）
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -78,9 +87,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.platform.arch }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
 
       - name: 生成构建摘要
         run: |
