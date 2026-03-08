@@ -692,3 +692,32 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* 全局去除“飞起”位移动效（按反馈） */
+.btn:hover,
+.btn:active,
+.btn-small:hover,
+.btn-sm:hover,
+.theme-toggle:hover,
+.theme-toggle:active,
+.language-btn:hover,
+.stat-card:hover,
+.plugin-card:hover,
+.feature-card:hover,
+.contact-card:hover,
+.flow-step:hover {
+    transform: none !important;
+}
+
+/* 下拉菜单不再上下位移出现 */
+.language-dropdown,
+.language-dropdown.show {
+    transform: none !important;
+}
+
+/* 常见弹层/通知取消 slideIn 弹入 */
+.toast,
+.modal-content,
+.provider-modal-content {
+    animation: none !important;
+}

@@ -21,7 +21,6 @@
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-30);
 }
@@ -164,7 +163,6 @@
 .routing-example-card:hover {
     border-color: var(--primary-color);
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
 }
 
 .routing-card-header {
@@ -426,7 +424,6 @@
     max-height: 85vh;
     overflow: hidden;
     box-shadow: var(--shadow-xl);
-    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     border: 1px solid var(--border-color);
 }
 
@@ -484,7 +481,6 @@
 .modal-cancel:hover {
     background: var(--neutral-200);
     border-color: var(--neutral-500);
-    transform: translateY(-1px);
 }
 
 /* 授权信息样式 */
@@ -571,6 +567,47 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.provider-summary-actions .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 1px 3px var(--neutral-shadow-md);
+}
+
+/* 顶部操作按钮统一降饱和（更克制） */
+.provider-summary-actions .btn-success {
+    background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+    color: #f8fafc;
+    border: 1px solid #134e4a;
+}
+
+.provider-summary-actions .btn-success:hover {
+    background: linear-gradient(135deg, #115e59 0%, #134e4a 100%);
+    color: #ffffff;
+}
+
+.provider-summary-actions .btn-warning {
+    background: linear-gradient(135deg, #a16207 0%, #854d0e 100%);
+    color: #fffbeb;
+    border: 1px solid #78350f;
+}
+
+.provider-summary-actions .btn-warning:hover {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    color: #ffffff;
+}
+
+.provider-summary-actions .btn-info {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    color: #eff6ff;
+    border: 1px solid #1e3a8a;
+}
+
+.provider-summary-actions .btn-info:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    color: #ffffff;
 }
 
 .provider-actions {
@@ -589,7 +626,6 @@
 
 .provider-item-detail:hover {
     box-shadow: 0 4px 16px var(--neutral-shadow-lg);
-    transform: translateY(-1px);
 }
 
 .provider-item-header {
@@ -679,7 +715,6 @@
 }
 
 .btn-edit:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--primary-40);
 }
 
@@ -690,7 +725,6 @@
 }
 
 .btn-delete:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--danger-40);
 }
 
@@ -711,7 +745,6 @@
 }
 
 .btn-quick-link:hover {
-    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
     background: linear-gradient(135deg, var(--btn-primary-hover) 0%, var(--primary-color) 100%);
 }
@@ -734,7 +767,6 @@
 }
 
 .btn-batch-link:hover {
-    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
     background: linear-gradient(135deg, var(--btn-primary-hover) 0%, var(--primary-color) 100%);
 }
@@ -877,7 +909,6 @@
 .provider-item-detail.unhealthy:hover {
     border-color: var(--warning-color);
     box-shadow: 0 6px 20px var(--warning-25);
-    transform: translateY(-2px);
 }
 
 .provider-item-detail.unhealthy .provider-item-header {
@@ -996,7 +1027,6 @@
 }
 
 .btn-warning:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--warning-40);
 }
 
@@ -1007,7 +1037,6 @@
 }
 
 .btn-info:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--info-hover);
 }
 
@@ -1020,23 +1049,55 @@
 }
 
 .provider-summary-actions .btn-danger:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--danger-40);
     background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-alt) 100%);
 }
 
 /* 刷新不健康UUID按钮样式 */
 .provider-summary-actions .btn-secondary {
-    background: linear-gradient(135deg, var(--neutral-500) 0%, var(--neutral-600) 100%);
-    color: var(--white);
-    border: none;
+    /* 使用固定中性深色，避免在暗色主题下 neutral token 变浅导致文字重叠 */
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    color: #f8fafc;
+    border: 1px solid #475569;
     box-shadow: 0 2px 8px var(--neutral-shadow-lg);
 }
 
 .provider-summary-actions .btn-secondary:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--neutral-shadow-lg);
-    background: linear-gradient(135deg, var(--neutral-600) 0%, var(--neutral-700) 100%);
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    color: #ffffff;
+}
+
+/* 深色主题下进一步确保对比度 */
+[data-theme="dark"] .provider-summary-actions .btn-secondary {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+[data-theme="dark"] .provider-summary-actions .btn-secondary:hover {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #f8fafc;
+    border-color: #64748b;
+}
+
+/* 深色主题下再压一点亮度，避免“发光感” */
+[data-theme="dark"] .provider-summary-actions .btn-success {
+    background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%);
+    border-color: #134e4a;
+    color: #ccfbf1;
+}
+
+[data-theme="dark"] .provider-summary-actions .btn-warning {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    border-color: #78350f;
+    color: #fef3c7;
+}
+
+[data-theme="dark"] .provider-summary-actions .btn-info {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    border-color: #1e3a8a;
+    color: #dbeafe;
 }
 
 /* 不支持的模型选择器样式 */
@@ -1135,7 +1196,6 @@
 .generate-auth-btn:hover {
     background: var(--info-hover);
     color: var(--info-text-darker);
-    transform: translateY(-1px);
 }
 
 /* 授权模态框样式 */
@@ -1164,7 +1224,6 @@
     box-shadow: 0 25px 80px var(--neutral-shadow-40);
     display: flex;
     flex-direction: column;
-    animation: modalSlideIn 0.3s ease;
 }
 
 .modal-header {
@@ -1219,7 +1278,6 @@
 
 .open-auth-btn:hover {
     background: linear-gradient(135deg, var(--btn-primary-hover) 0%, var(--primary-color) 100%);
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--primary-40);
 }
 
