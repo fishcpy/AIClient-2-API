@@ -7,6 +7,15 @@ on:
     paths:
       - 'VERSION'  # 仅当 VERSION 文件变更时触发
   workflow_dispatch:  # 允许手动触发
+    inputs:
+      arm64_build_type:
+        description: 'ARM64 构建方式'
+        required: true
+        default: 'native'
+        type: choice
+        options:
+          - native
+          - vm
 
 env:
   REGISTRY: docker.io
@@ -61,7 +70,7 @@ jobs:
         include:
           - runs-on: ubuntu-latest
             platform: linux/amd64
-          - runs-on: ubuntu-latest-arm64
+          - runs-on: ${{ github.event_name == 'workflow_dispatch' && inputs.arm64_build_type == 'vm' ? 'ubuntu-latest' : 'ubuntu-latest-arm64' }}
             platform: linux/arm64
 
     steps:
@@ -103,6 +112,7 @@ jobs:
           platforms: ${{ matrix.platform }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          builder: ${{ matrix.platform == 'linux/arm64' && runner.os == 'Linux' && runner.arch == 'X64' ? 'default' : '' }}
 
   finalize:
     needs: build-and-push
@@ -123,6 +133,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**版本号:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**构建平台:** linux/amd64, linux/arm64" >> $GITHUB_STEP_SUMMARY
+          echo "**ARM64 构建方式:** ${{ github.event_name == 'workflow_dispatch' && inputs.arm64_build_type || 'native' }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**镜像标签:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
