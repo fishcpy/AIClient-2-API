@@ -7,20 +7,10 @@ on:
     paths:
       - 'VERSION'  # 仅当 VERSION 文件变更时触发
   workflow_dispatch:  # 允许手动触发
-    inputs:
-      arm64_arch:
-        description: 'ARM64 架构构建模式'
-        required: true
-        default: 'native'
-        type: choice
-        options:
-          - native
-          - emulated
 
 env:
   REGISTRY: docker.io
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/aiclient-2-api
-  ARM64_ARCH: ${{ github.event.inputs.arm64_arch || 'native' }}
 
 jobs:
   create-tag:
@@ -71,7 +61,7 @@ jobs:
         include:
           - runs-on: ubuntu-latest
             platform: linux/amd64
-          - runs-on: ${{ env.ARM64_ARCH == 'native' && 'ubuntu-latest-arm64' || 'ubuntu-latest' }}
+          - runs-on: ubuntu-latest-arm64
             platform: linux/arm64
 
     steps:
@@ -133,7 +123,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**版本号:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**构建平台:** linux/amd64, linux/arm64" >> $GITHUB_STEP_SUMMARY
-          echo "**ARM64 构建模式:** ${{ env.ARM64_ARCH }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**镜像标签:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
